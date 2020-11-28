@@ -1,0 +1,24 @@
+{
+  "name": "movie-finder-telegram-bot",
+  "version": "1.0.0",
+  "description": "Movie finder bot for Telegram",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx nodemon index.js",
+    "test": "test"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "movie"
+  ],
+  "author": "Juha Pekkarinen",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "node-telegram-bot-api": "^0.50.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
