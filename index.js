@@ -72,4 +72,8 @@ bot.onText(/\/(m|movie) (.+)/, async (msg, match) => {
   })
 })
 
-logSuccess('Started movie finder bot')
+// Setting up app is needed since Heroku requires PORT to be bound within 60 seconds of deployment
+const express = require('express')
+const port = process.env.PORT || 3000
+
+express().listen(port, () => logSuccess('Started movie finder bot'))
