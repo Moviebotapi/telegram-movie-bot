@@ -24,6 +24,7 @@ const bot = new Telegraf(BOT_TOKEN)
 
 bot.start((ctx) => {
   logProgress('Start command triggered')
+
   if (ctx.from.is_bot) {
     return ctx.reply(`Sorry I only interact with humans!`)
   }
@@ -35,6 +36,7 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
   const movie = ctx.match[2]
 
   console.log(`Movie command triggered with phrase '${movie}'`)
+
   if (ctx.from.is_bot) {
     return ctx.reply(`Sorry I only interact with humans!`)
   }

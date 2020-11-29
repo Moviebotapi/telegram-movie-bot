@@ -20,5 +20,9 @@ request(setWebHookUrl, (error, response, body) => {
     )
   }
 
+  const res = JSON.parse(body)
+
+  console.log(res)
+
   logSuccess(`Ruccessfully registered webhook to ${DEPLOY_URL}`)
 })
