@@ -97,7 +97,7 @@ const registerWebHook = () => {
       return logError(
         `Webhook registration to ${DEPLOY_URL} failed: ${
           response.statusCode
-        }: ${error ?? body}`
+        }: ${error || body}`
       )
     }
     logSuccess(`Ruccessfully registered webhook to ${DEPLOY_URL}`)
