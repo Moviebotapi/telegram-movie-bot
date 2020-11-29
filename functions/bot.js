@@ -1,11 +1,10 @@
 require('dotenv').config()
 require('colors')
 
-const { BOT_TOKEN, OMDB_API_KEY } = process.env
+const { logError, logProgress, logSuccess } = require('../utils/logger')
+const escapeMarkdown = require('../utils/escapeMarkdown')
 
-const logProgress = (message) => console.info(`\n  ${message}...\n`.cyan)
-const logSuccess = (message) => console.info(`\n  ${message}\n`.green.bold)
-const logError = (message) => console.error(`\n  ${message}\n`.red.bold)
+const { BOT_TOKEN, OMDB_API_KEY } = process.env
 
 if (!BOT_TOKEN) {
   logError('Fatal error: BOT_TOKEN environment variable is required!')
@@ -18,15 +17,6 @@ if (!OMDB_API_KEY) {
 }
 
 logProgress('Starting movie finder bot')
-
-const escapeMarkdown = (message = '') =>
-  message
-    .replace(/\|/g, '\\|')
-    .replace(/\!/g, '\\!')
-    .replace(/-/g, '\\-')
-    .replace(/\[/g, '\\[')
-    .replace(/`/g, '\\`')
-    .replace(/\./g, '\\.')
 
 const Telegraf = require('telegraf')
 const request = require('request')
@@ -52,10 +42,8 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
     if (!message) {
       return
     }
-    ctx.reply(escapeMarkdown(message), {
-      parse_mode: 'MarkdownV2',
-      ...options,
-    })
+
+    ctx.reply(escapeMarkdown(message), { parse_mode: 'MarkdownV2', ...options })
   }
 
   const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
@@ -82,29 +70,6 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
       .catch((err) => sendMessage(err.message))
   })
 })
-
-const registerWebHook = () => {
-  const { NETLIFY, DEPLOY_URL } = process.env
-
-  if (!NETLIFY) {
-    return
-  }
-
-  const setWebHookUrl = `https://api.telegram.org/bot${BOT_TOKEN}/setWebhook?url=${DEPLOY_URL}/api/bot`
-
-  request(setWebHookUrl, (error, response, body) => {
-    if (error || response.statusCode !== 200) {
-      return logError(
-        `Webhook registration to ${DEPLOY_URL} failed: ${
-          response.statusCode
-        }: ${error || body}`
-      )
-    }
-    logSuccess(`Ruccessfully registered webhook to ${DEPLOY_URL}`)
-  })
-}
-
-registerWebHook()
 
 exports.handler = async (event) => {
   try {
