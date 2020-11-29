@@ -119,6 +119,4 @@ exports.handler = async (event) => {
   }
 }
 
-bot.launch()
-
 logSuccess('Movie finder bot started')
