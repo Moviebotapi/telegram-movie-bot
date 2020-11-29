@@ -24,6 +24,8 @@ const config = { telegram: { webhookReply: false } }
 
 const bot = new Telegraf(BOT_TOKEN, config)
 
+bot.use(Telegraf.log())
+
 bot.start((ctx) => {
   logProgress('Start command triggered')
 
@@ -36,6 +38,7 @@ bot.start((ctx) => {
 
 bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
   const movie = ctx.match[2]
+  const chatId = ctx.message.chat.id
 
   console.log(`Movie command triggered with phrase '${movie}'`)
 
@@ -48,7 +51,10 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
       return
     }
 
-    ctx.reply(escapeMarkdown(message), { parse_mode: 'MarkdownV2', ...options })
+    ctx.telegram.sendMessage(chatId, escapeMarkdown(message), {
+      parse_mode: 'MarkdownV2',
+      ...options,
+    })
   }
 
   const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
