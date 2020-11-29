@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const request = require('request')
 const { logError, logSuccess } = require('./utils/logger')
 

@@ -1,3 +1,5 @@
+require('colors')
+
 const logProgress = (msg) => console.info(`\n  ${msg}...\n`.cyan)
 
 const logSuccess = (msg) => console.info(`\n  ${msg}\n`.green.bold)
