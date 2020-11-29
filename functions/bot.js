@@ -33,7 +33,7 @@ bot.start((ctx) => {
     return ctx.reply(`Sorry I only interact with humans!`)
   }
 
-  ctx.reply(`Hello, ${ctx.from.first_name}`)
+  return ctx.reply(`Hello, ${ctx.from.first_name}`)
 })
 
 bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
@@ -61,7 +61,7 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
 
   await sendMessage(`_Looking for_ ${movie}...`)
 
-  request(url, (error, response, body) => {
+  return request(url, (error, response, body) => {
     const res = JSON.parse(body)
 
     if (res.Error) {
@@ -76,7 +76,7 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
 
     const caption = escapeMarkdown(rawCaption)
 
-    ctx
+    return ctx
       .replyWithPhoto(res.Poster, { caption, parse_mode: 'MarkdownV2' })
       .catch((err) => sendMessage(err.message))
   })
