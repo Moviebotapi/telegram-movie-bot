@@ -46,12 +46,12 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
     return ctx.reply(`Sorry I only interact with humans!`)
   }
 
-  const sendMessage = (message, options = {}) => {
+  const sendMessage = async (message, options = {}) => {
     if (!message) {
       return
     }
 
-    ctx.telegram.sendMessage(chatId, escapeMarkdown(message), {
+    return ctx.telegram.sendMessage(chatId, escapeMarkdown(message), {
       parse_mode: 'MarkdownV2',
       ...options,
     })
