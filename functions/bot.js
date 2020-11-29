@@ -1,5 +1,4 @@
 require('dotenv').config()
-require('colors')
 
 const { logError, logProgress, logSuccess } = require('./utils/logger')
 const escapeMarkdown = require('./utils/escapeMarkdown')
@@ -73,6 +72,8 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
 
 exports.handler = async (event) => {
   try {
+    console.log('handler fired')
+    console.log(event)
     await bot.handleUpdate(JSON.parse(event.body))
     return { statusCode: 200, body: '' }
   } catch (error) {
