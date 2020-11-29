@@ -1,5 +1,5 @@
 const request = require('request')
-const { logError, logSuccess } = require('./logger')
+const { logError, logSuccess } = require('./utils/logger')
 
 const { NETLIFY, DEPLOY_URL, BOT_TOKEN, DEPLOY_URL } = process.env
 

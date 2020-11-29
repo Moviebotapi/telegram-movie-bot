@@ -1,8 +1,8 @@
 require('dotenv').config()
 require('colors')
 
-const { logError, logProgress, logSuccess } = require('../utils/logger')
-const escapeMarkdown = require('../utils/escapeMarkdown')
+const { logError, logProgress, logSuccess } = require('./utils/logger')
+const escapeMarkdown = require('./utils/escapeMarkdown')
 
 const { BOT_TOKEN, OMDB_API_KEY } = process.env
 

@@ -1,5 +1,5 @@
 [build]
-command = "netlify-lambda install && mkdir ./public && node helpers/registerWebhook.js"
+command = "netlify-lambda install && mkdir ./public && npm run register-webhook"
 functions = "functions"
 
 [template.environment]

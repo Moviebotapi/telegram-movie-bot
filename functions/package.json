@@ -4,7 +4,8 @@
   "description": "Movie finder bot for Telegram",
   "main": "bot.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "register-webhook": "node ./registerWebhook.js"
   },
   "keywords": [
     "telegram",
