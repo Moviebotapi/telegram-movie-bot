@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "register-webhook": "node ./registerWebhook.js",
-    "postinstall": "npm run register-webhook"
+    "start": "npm run register-webhook"
   },
   "keywords": [
     "telegram",
