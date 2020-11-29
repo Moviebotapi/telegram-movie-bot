@@ -19,11 +19,6 @@ if (!OMDB_API_KEY) {
 
 logProgress('Starting movie finder bot')
 
-const TelegramBot = require('node-telegram-bot-api')
-const request = require('request')
-
-const bot = new TelegramBot(BOT_TOKEN, { polling: true })
-
 const escapeMarkdown = (message = '') =>
   message
     .replace(/\|/g, '\\|')
@@ -33,15 +28,31 @@ const escapeMarkdown = (message = '') =>
     .replace(/`/g, '\\`')
     .replace(/\./g, '\\.')
 
-bot.onText(/\/(m|movie) (.+)/, async (msg, match) => {
-  const movie = match[2]
-  const chatId = msg.chat.id
+const Telegraf = require('telegraf')
+const request = require('request')
+
+const bot = new Telegraf(BOT_TOKEN)
+
+bot.start((ctx) => {
+  if (ctx.from.is_bot) {
+    return ctx.reply(`Sorry I only interact with humans!`)
+  }
+
+  ctx.reply(`Hello, ${ctx.from.first_name}`)
+})
+
+bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
+  if (ctx.from.is_bot) {
+    return ctx.reply(`Sorry I only interact with humans!`)
+  }
+
+  const movie = ctx.match[2]
 
   const sendMessage = (message, options = {}) => {
     if (!message) {
       return
     }
-    bot.sendMessage(chatId, escapeMarkdown(message), {
+    ctx.reply(escapeMarkdown(message), {
       parse_mode: 'MarkdownV2',
       ...options,
     })
@@ -66,14 +77,48 @@ bot.onText(/\/(m|movie) (.+)/, async (msg, match) => {
 
     const caption = escapeMarkdown(rawCaption)
 
-    bot
-      .sendPhoto(chatId, res.Poster, { caption, parse_mode: 'MarkdownV2' })
+    ctx
+      .replyWithPhoto(res.Poster, { caption, parse_mode: 'MarkdownV2' })
       .catch((err) => sendMessage(err.message))
   })
 })
 
-// Setting up app is needed since Heroku requires PORT to be bound within 60 seconds of deployment
-const express = require('express')
-const port = process.env.PORT || 3000
+const registerWebHook = () => {
+  const { NETLIFY, DEPLOY_URL } = process.env
 
-express().listen(port, () => logSuccess('Started movie finder bot'))
+  if (!NETLIFY) {
+    return
+  }
+
+  const setWebHookUrl = `https://api.telegram.org/bot${BOT_TOKEN}/setWebhook?url=${DEPLOY_URL}/api/bot`
+
+  request(setWebHookUrl, (error, response, body) => {
+    if (error || response.statusCode !== 200) {
+      return logError(
+        `Webhook registration to ${DEPLOY_URL} failed: ${
+          response.statusCode
+        }: ${error ?? body}`
+      )
+    }
+    logSuccess(`Ruccessfully registered webhook to ${DEPLOY_URL}`)
+  })
+}
+
+registerWebHook()
+
+exports.handler = async (event) => {
+  try {
+    await bot.handleUpdate(JSON.parse(event.body))
+    return { statusCode: 200, body: '' }
+  } catch (error) {
+    console.log(error)
+    return {
+      statusCode: 400,
+      body: 'This endpoint is meant for bot and telegram communication',
+    }
+  }
+}
+
+bot.launch()
+
+logSuccess('Movie finder bot started')

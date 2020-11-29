@@ -1,0 +1,9 @@
+[build]
+  functions = "functions"
+[template.environment]
+  BOT_TOKEN = "Telegram bot token here"
+  OMDB_API_KEY = "OMDB api secret key here"
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

@@ -4,7 +4,7 @@
   "description": "Movie finder bot for Telegram",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js",
+    "start": "npx nodemon functions/bot.js",
     "test": "test"
   },
   "keywords": [
@@ -19,7 +19,8 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "node-telegram-bot-api": "^0.50.0",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "telegraf": "^3.38.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
