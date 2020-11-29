@@ -66,7 +66,7 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
     const res = await response.json()
 
     if (res.Error) {
-      return sendMessage(res.Error)
+      throw new Error(res.Error)
     }
 
     const ratings = res.Ratings.map(
