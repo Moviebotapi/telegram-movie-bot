@@ -16,10 +16,10 @@
   "author": "Juha Pekkarinen",
   "license": "MIT",
   "dependencies": {
-    "netlify-lambda": "^2.0.1",
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
-    "request": "^2.88.2",
+    "netlify-lambda": "^2.0.1",
+    "node-fetch": "^2.6.1",
     "telegraf": "^3.38.0"
   },
   "devDependencies": {

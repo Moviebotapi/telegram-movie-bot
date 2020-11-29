@@ -18,7 +18,7 @@ if (!OMDB_API_KEY) {
 logProgress('Starting movie finder bot')
 
 const Telegraf = require('telegraf')
-const request = require('request')
+const fetch = require('node-fetch')
 
 const config = { telegram: { webhookReply: false } }
 
@@ -61,8 +61,9 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
 
   await sendMessage(`_Looking for_ ${movie}...`)
 
-  return request(url, (error, response, body) => {
-    const res = JSON.parse(body)
+  try {
+    const response = await fetch(url)
+    const res = await response.json()
 
     if (res.Error) {
       return sendMessage(res.Error)
@@ -76,10 +77,11 @@ bot.hears(/\/(m|movie) (.+)/, async (ctx) => {
 
     const caption = escapeMarkdown(rawCaption)
 
-    return ctx
-      .replyWithPhoto(res.Poster, { caption, parse_mode: 'MarkdownV2' })
-      .catch((err) => sendMessage(err.message))
-  })
+    return ctx.replyWithPhoto(res.Poster, { caption, parse_mode: 'MarkdownV2' })
+  } catch (error) {
+    logError(error.message)
+    return sendMessage(error.message)
+  }
 })
 
 exports.handler = async (event) => {
