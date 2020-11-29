@@ -5,7 +5,8 @@
   "main": "bot.js",
   "scripts": {
     "test": "test",
-    "register-webhook": "node ./registerWebhook.js"
+    "register-webhook": "node ./registerWebhook.js",
+    "postinstall": "npm run register-webhook"
   },
   "keywords": [
     "telegram",
