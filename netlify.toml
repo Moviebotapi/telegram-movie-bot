@@ -1,9 +1,12 @@
 [build]
-  functions = "functions"
+command = "netlify-lambda install && mkdir ./public"
+functions = "functions"
+
 [template.environment]
-  BOT_TOKEN = "Telegram bot token here"
-  OMDB_API_KEY = "OMDB api secret key here"
+BOT_TOKEN = "Telegram bot token here"
+OMDB_API_KEY = "OMDB api secret key here"
+
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+from = "/api/*"
+status = 200
+to = "/.netlify/functions/:splat"
