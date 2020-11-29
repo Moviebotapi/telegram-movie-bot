@@ -20,7 +20,9 @@ logProgress('Starting movie finder bot')
 const Telegraf = require('telegraf')
 const request = require('request')
 
-const bot = new Telegraf(BOT_TOKEN)
+const config = { telegram: { webhookReply: false } }
+
+const bot = new Telegraf(BOT_TOKEN, config)
 
 bot.start((ctx) => {
   logProgress('Start command triggered')
