@@ -1,7 +1,5 @@
-require('dotenv').config()
-
 const fetch = require('node-fetch')
-const { logError, logSuccess } = require('./utils/logger')
+const logger = require('./logger')
 
 const { NETLIFY, DEPLOY_URL, BOT_TOKEN } = process.env
 
@@ -12,7 +10,9 @@ if (!NETLIFY) {
 const setWebHookUrl = `https://api.telegram.org/bot${BOT_TOKEN}/setWebhook?url=${DEPLOY_URL}/api/bot`
 
 fetch(setWebHookUrl).then(
-  () => logSuccess(`Ruccessfully registered webhook to ${DEPLOY_URL}`),
+  () => logger.success(`Ruccessfully registered webhook to ${DEPLOY_URL}`),
   (error) =>
-    logError(`Webhook registration to ${DEPLOY_URL} failed: ${error.message}`)
+    logger.error(
+      `Webhook registration to ${DEPLOY_URL} failed: ${error.message}`
+    )
 )
