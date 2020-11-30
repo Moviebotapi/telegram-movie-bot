@@ -1,5 +1,6 @@
 const logger = require('./logger')
 const Telegraf = require('telegraf')
+const fetch = require('node-fetch')
 
 const { BOT_TOKEN, OMDB_API_KEY } = process.env
 
@@ -41,7 +42,7 @@ const createBot = (config = {}) => {
 
     const sendMessage = async (message, options = {}) => {
       if (!message) {
-        return
+        throw new Error('Telegraf does not allow empty message')
       }
 
       return ctx.telegram.sendMessage(chatId, escapeMarkdown(message), {
@@ -50,11 +51,11 @@ const createBot = (config = {}) => {
       })
     }
 
-    const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
-
-    await sendMessage(`_Looking for_ ${movie}...`)
-
     try {
+      await sendMessage(`_Looking for_ ${movie}...`)
+
+      const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
+
       const response = await fetch(url)
       const res = await response.json()
 
