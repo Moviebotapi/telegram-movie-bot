@@ -1,4 +1,5 @@
 const logger = require('./logger')
+const Telegraf = require('telegraf')
 
 const { BOT_TOKEN, OMDB_API_KEY } = process.env
 

@@ -16,4 +16,6 @@ if (!OMDB_API_KEY) {
 
 if (NETLIFY) {
   require('./registerWebhook')
+} else {
+  require('./createBot')()
 }
