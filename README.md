@@ -10,4 +10,4 @@ Telegram bot that finds and shows movies based search string
 
 ```
 
-[Example](example.png)
+![Example](example.png)
