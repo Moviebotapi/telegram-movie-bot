@@ -4,8 +4,7 @@
   "description": "Movie finder bot for Telegram",
   "main": "functions/bot.js",
   "scripts": {
-    "build": "pm2 start ./src/start.js --output public"
-    "start": "node ./src/start.js",
+    "build": "node ./src/start.js",
     "start-dev": "nodemon ./src/start.js",
     "test": "test"
   },
