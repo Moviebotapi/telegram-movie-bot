@@ -5,7 +5,7 @@
   "main": "functions/bot.js",
   "scripts": {
     "build": "./src/start.js build --output public"
-  }
+  },
   "keywords": [
     "telegram",
     "bot",
