@@ -1,8 +1,10 @@
 const logger = require('./logger')
 const Telegraf = require('telegraf')
 const fetch = require('node-fetch')
+const axios = require('axios')
+const cheerio = require('cheerio')
 
-const { BOT_TOKEN, OMDB_API_KEY } = process.env
+const { BOT_TOKEN } = process.env
 
 const createBot = (config = {}) => {
   const bot = new Telegraf(BOT_TOKEN, config)
@@ -54,7 +56,7 @@ const createBot = (config = {}) => {
     try {
       await sendMessage(`_Looking for_ ${movie}...`)
 
-      const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
+   /*   const url = `http://www.omdbapi.com/?apiKey=${OMDB_API_KEY}&t=${movie}`
 
       const response = await fetch(url)
       const res = await response.json()
@@ -65,13 +67,30 @@ const createBot = (config = {}) => {
 
       const ratings = res.Ratings.map(
         (rating) => `*${rating.Source}:* ${rating.Value}`
-      ).join('\n')
+      ).join('\n')*/
 
-      const rawCaption = `*${res.Title}*\n\n${res.Plot}\n\n${ratings}\n\n*Year:* ${res.Year}\n*Rated:* ${res.Rated}\n*Released:* ${res.Released}\n*Runtime:* ${res.Runtime}\n*Genre:* ${res.Genre}\n*Director:* ${res.Director}`
+
+const url = `${movie}`;
+const response = await axios.get(url);  
+const $ = cheerio.load(response.data);
+   
+    const title = $("div.banners-right > h1").text().trim()
+    const imdb = $("div.jws-imdb").text().trim()
+    const desc = $("strong").text()
+    const year = $("span.video-years").text()
+    const duration = $("span.video-time").text()
+    const type1 = $("div.jws-category > a:nth-child(1)").text()
+    const type2 = $("div.jws-category > a:nth-child(2)").text()
+    const type3 = $("div.jws-category > a:nth-child(3)").text()
+    const image = $("div.jws-images > img").attr('src')
+    const type = ${type1} | ${type2} | ${type3}
+      
+
+      const rawCaption = `*${title}*\n\n${imdb}\n\n${year}\n\n*Year:* ${duration}\n*Rated:* ${type}\n*Released:* ${desc}`
 
       const caption = escapeMarkdown(rawCaption)
 
-      return ctx.replyWithPhoto(res.Poster, { ...messageConfig, caption })
+      return ctx.replyWithPhoto(image, { ...messageConfig, caption })
     } catch (error) {
       logger.error(error.message)
       return sendMessage(error.message)
